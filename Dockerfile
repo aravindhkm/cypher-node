@@ -1,6 +1,5 @@
 FROM tronprotocol/centos7:0.2
 
-ENV TMP_DIR="/tron-build"
 ENV JDK_TAR="jdk-8u202-linux-x64.tar.gz"
 ENV JDK_DIR="jdk1.8.0_202"
 ENV JDK_MD5="0029351f7a946f6c05b582100c7d45b7"
