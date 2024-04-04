@@ -4,8 +4,7 @@ ENV TMP_DIR="/tron-build"
 ENV JDK_TAR="jdk-8u202-linux-x64.tar.gz"
 ENV JDK_DIR="jdk1.8.0_202"
 ENV JDK_MD5="0029351f7a946f6c05b582100c7d45b7"
-ENV BASE_DIR="/cypher-node"
-
+ENV BASE_DIR="/cypher"
 
 RUN set -o errexit -o nounset \
     && yum -y install git wget \
@@ -19,10 +18,12 @@ RUN set -o errexit -o nounset \
     && mkdir -p $BASE_DIR \
     && cd $BASE_DIR \
     && git clone https://github.com/aravindhkm/cypher-node.git \
+    && chmod +x ./cypher-node \
     && cd cypher-node \
     && ./gradlew build -x test \
     && cd build/libs \
-    && mv FullNode.jar $BASE_DIR \
+    && chmod +x ./FullNode.jar \
+    && cp FullNode.jar $BASE_DIR \
     && mv $JAVA_HOME/jre /usr/local \
     && rm -rf $JAVA_HOME \
     && yum clean all
@@ -32,6 +33,4 @@ ENV PATH=$PATH:$JAVA_HOME/bin
 
 WORKDIR $BASE_DIR
 
-ENTRYPOINT ["./bin/docker-entrypoint.sh"]
-
-CMD java -Xmx6g -XX:+HeapDumpOnOutOfMemoryError -jar ./cypher-node/FullNode.jar --witness -c /cypher-node/supernode.conf
+CMD java -Xmx6g -XX:+HeapDumpOnOutOfMemoryError -jar /cypher/FullNode.jar --witness -c /cypher/cypher-node/supernode.conf
